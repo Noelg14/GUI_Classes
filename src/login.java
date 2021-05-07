@@ -41,33 +41,47 @@ public class login{
                 String us = u.getText();
                 String pa = p.getText();
 
-                if(us.equals(null) || pa.equals(null)){
+                if(us.equals("") || pa.equals("")){
                     JOptionPane.showMessageDialog(new JFrame(),"Please enter a username & Password","Error",JOptionPane.ERROR_MESSAGE);
                 }
                 else{
 					try {
 						Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 						Statement stmt=con.createStatement();  
-						ResultSet rs=stmt.executeQuery("Select * from testperson;"); 
+						ResultSet rs=stmt.executeQuery("Select id,first_name,password from testperson;"); 
 						//ResultSetMetaData rsmd = rs.getMetaData();
-						while(rs.next()){
-							if(rs.getString(2).toLowerCase().equals(us) && rs.getString(2).toLowerCase().equals(pa)){ //uses First name (2) and First name (2)
+						//System.out.println(rsmd.getColumnCount()); // prints 3
 
+
+						while(rs.next()){
+							String checkuser=rs.getString(2);
+							String checkpass=rs.getString(3);
+							System.out.println(checkpass+" & "+checkuser+" VS "+us+" & "+pa + " Eval:"+(checkuser.equals(us) && checkpass.equals(pa)));
+
+							if(checkuser.equals(us) && checkpass.equals(pa))
+							{ //uses First name (2) and password (3)
+								
 								long id=rs.getLong(1);//User ID
-								JOptionPane.showMessageDialog(new JFrame(),"Login Successful, User ID:"+rs.getInt(1),"Error",JOptionPane.INFORMATION_MESSAGE);
-								person p = person.getP(id);
+								System.out.println(id);
+								JOptionPane.showMessageDialog(new JFrame(),"Login Successful, User ID:"+id,"Error",JOptionPane.INFORMATION_MESSAGE);
+								person p = person.getP(id); //issues happen here 
 
 								System.out.print(p.lname+"&"+p.fname+"&"+p.id);
 								chooseType(p);
 								login.dispose();
-								//break;
 								con.close();
+								checkuser="";
+								checkpass="";
+								break;
 							}
-							else{
-								System.out.print("i failed");
+							else {
+								System.out.println("failed");
+								checkuser="";
+								checkpass="";
 							}
 						}
-						JOptionPane.showMessageDialog(new JFrame(),"Login Failed. Try Again!","Error",JOptionPane.INFORMATION_MESSAGE);
+						//JOptionPane.showMessageDialog(new JFrame(),"Login Failed. Try Again!","Error",JOptionPane.INFORMATION_MESSAGE);
+						con.close();
 					} 
 					catch (Exception s) {
 						//JOptionPane.showMessageDialog(new JFrame(),s,"Error",JOptionPane.ERROR_MESSAGE);
@@ -119,6 +133,5 @@ public class login{
 		});
 
 	}
-
 
 }

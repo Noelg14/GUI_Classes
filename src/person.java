@@ -8,7 +8,7 @@ public class person {
 	long id;
     String fname="";
     String lname="";
-    Date dob = new Date(System.currentTimeMillis());
+    Date dob;
     String email="";
 
 	public static void guiP(long id) {
@@ -81,20 +81,21 @@ public class person {
 			//Class.forName("com.mysql.cj.jdbc.Driver");  
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 			try{
-				String query = " insert into testperson (id, first_name, last_name, email, DOB)"+ " values (?, ?, ?, ?, ?)";// Ref
+				String query = " insert into testperson (id, first_name, last_name, email, DOB,password)"+ " values (?, ?, ?, ?, ?,?)";// Ref
 				PreparedStatement preparedStmt = con.prepareStatement(query);
 				preparedStmt.setLong(1, p.id);
 				preparedStmt.setString(2, p.fname);
 				preparedStmt.setString (3,p.lname);
 				preparedStmt.setString(4, p.email);
 				preparedStmt.setDate(5, p.dob);
+				preparedStmt.setString(6,p.fname.toLowerCase());
 			  
 			  // execute the preparedstatement
 			  preparedStmt.execute();
 			  con.close();
 			  JOptionPane.showMessageDialog(new JFrame(),"Created new person, ID:"+p.id,"Saved",JOptionPane.INFORMATION_MESSAGE);
 			  System.out.println("\nsaved");
-			  System.exit(0);
+			  login.chooseType(null);
 			}
 			catch(Exception e){
 				System.out.println(e);
@@ -117,6 +118,7 @@ public class person {
 		System.out.print("Please enter an email: ");
 		p.email=sc.nextLine(); */
 		p.id=(System.currentTimeMillis());
+		p.dob =new Date(System.currentTimeMillis());
 		p.fname=fn;
 		p.lname=ln;
 		p.email=em;
@@ -126,19 +128,24 @@ public class person {
 	}
 
 	static person getP(long id2){
+		
 		person p = new person();
 		try{
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 			Statement stmt=con.createStatement();  
 
-			ResultSet rs=stmt.executeQuery("Select * from testperson where ID="+id2);
-			while(rs.next()){
-				p.id=rs.getInt(1);
+			ResultSet rs=stmt.executeQuery("Select * from testperson where ID="+id2+" limit 1;");
+			if(rs.next()){
+				System.out.println(p.id);
+				p.id=id2;
 				p.fname=rs.getString(2);
 				p.lname= rs.getString(3);
-				System.out.println(p.lname+" "+p.fname+" "+p.id); //works 
-			}
+				System.out.println(p.fname+" "+p.lname+" "+p.id); //works 
 			return p;
+			}
+			else{
+				System.out.println("Uh Oh!");
+			}
 		}
 		catch(Exception e){}
 		return p;

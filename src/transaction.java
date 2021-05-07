@@ -64,7 +64,7 @@ public class transaction
 				gross.setText("");
 				net.setText("");
 				ref.setText("");
-				login.dispose();
+				//login.dispose();
 			}
 		});
 		reset.addActionListener( new ActionListener()
@@ -84,7 +84,7 @@ public class transaction
 			//Class.forName("com.mysql.cj.jdbc.Driver");  
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 			try{
-				String query = " insert into transaction (ID, Date, Gross, Tax, Net,Ref)"+ " values (?, ?, ?, ?, ?, ?)";// Ref
+				String query = " insert into transaction (ID, Date, Gross, Tax, Net,Ref,created_By)"+ " values (?, ?, ?, ?, ?, ?,?)";// Ref
 				PreparedStatement preparedStmt = con.prepareStatement(query);
 				preparedStmt.setLong(1, t.id);
 				preparedStmt.setDate(2, t.d);
@@ -92,6 +92,7 @@ public class transaction
 				preparedStmt.setDouble(4, t.tax);
 				preparedStmt.setDouble(5, t.net);
 				preparedStmt.setString(6, t.ref);
+				preparedStmt.setLong(7, t.createdBy);
 			  
 			  // execute the preparedstatement
 			  preparedStmt.execute();
@@ -129,4 +130,7 @@ public class transaction
 		//person.guiP();
 	}
 
+	static transaction getT(long id){ //need to work on this
+		return null;
+	}
 }
