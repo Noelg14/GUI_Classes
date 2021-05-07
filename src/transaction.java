@@ -14,7 +14,7 @@ public class transaction
     String ref="";
 
 	public static void guiT() {
-		JFrame login=new JFrame("Create Person:");
+		JFrame login=new JFrame("Create Transaction:");
 		final JTextField gross=new JTextField();   //Name field
 		final JTextField net=new JTextField();   //Lname field
 		final JTextField ref=new JTextField();   //email field
@@ -37,10 +37,10 @@ public class transaction
 		t2=new JLabel();
 		t3=new JLabel();     
 		t4= new JLabel();
-		t1.setText("Last Name: ");
-		t2.setText("Email: ");
+		t1.setText("Net (€): ");
+		t2.setText("Ref: ");
 		t3.setText("");
-		t4.setText("First Name: ");
+		t4.setText("Gross (€): ");
 
 		t1.setBounds(50,180,150,20);
 		t2.setBounds(50,210,150,20);

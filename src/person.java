@@ -94,6 +94,7 @@ public class person {
 			  con.close();
 			  
 			  System.out.println("\nsaved");
+			  System.exit(0);
 			}
 			catch(Exception e){
 				System.out.println(e);
