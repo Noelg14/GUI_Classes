@@ -48,7 +48,7 @@ public class login{
 					try {
 						Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 						Statement stmt=con.createStatement();  
-						ResultSet rs=stmt.executeQuery("Select id,first_name,password from testperson;"); 
+						ResultSet rs=stmt.executeQuery("Select id,first_name,password from testperson order by 1;"); 
 						//ResultSetMetaData rsmd = rs.getMetaData();
 						//System.out.println(rsmd.getColumnCount()); // prints 3
 
@@ -56,17 +56,18 @@ public class login{
 						while(rs.next()){
 							String checkuser=rs.getString(2);
 							String checkpass=rs.getString(3);
-							System.out.println(checkpass+" & "+checkuser+" VS "+us+" & "+pa + " Eval:"+(checkuser.equals(us) && checkpass.equals(pa)));
+							/*
+								System.out.println(checkuser +" "+ checkpass);
+								System.out.println(checkuser.equals(us) && checkpass.equals(pa));
+							*/
 
 							if(checkuser.equals(us) && checkpass.equals(pa))
 							{ //uses First name (2) and password (3)
 								
 								long id=rs.getLong(1);//User ID
-								System.out.println(id);
+								//System.out.println(id);
 								JOptionPane.showMessageDialog(new JFrame(),"Login Successful, User ID:"+id,"Error",JOptionPane.INFORMATION_MESSAGE);
-								person p = person.getP(id); //issues happen here 
-
-								System.out.print(p.lname+"&"+p.fname+"&"+p.id);
+								person p = person.getP(id); 
 								chooseType(p);
 								login.dispose();
 								con.close();
@@ -75,7 +76,7 @@ public class login{
 								break;
 							}
 							else {
-								System.out.println("failed");
+								//System.out.println("failed");
 								checkuser="";
 								checkpass="";
 							}
@@ -84,7 +85,6 @@ public class login{
 						con.close();
 					} 
 					catch (Exception s) {
-						//JOptionPane.showMessageDialog(new JFrame(),s,"Error",JOptionPane.ERROR_MESSAGE);
 					}
                 }
             }
@@ -100,27 +100,27 @@ public class login{
     }
 
 	public static void chooseType(person a){
-		JFrame choose=new JFrame("Logged in as "+a.fname+" "+a.lname); //doesnt display :/
-		final JTextField u=new JTextField();   //Name field
-		final JPasswordField p=new JPasswordField();   //Lname field
+		JFrame choose=new JFrame("Logged in as "+a.fname+" "+a.lname); //
 		final JButton createT=new JButton("Create Transaction");//creating instance of JButton  
 		final JButton createP=new JButton("Create Person");
+		final JButton getT=new JButton("Get Transaction");//creating instance of JButton  
+		final JButton getP=new JButton("Get Person");
 
-		choose.setSize(500,200);//400 width and 500 height  
+		choose.setSize(500,400);//width, height 
 		choose.setLayout(null);//using no layout managers  
 		choose.setVisible(true);//making the frame visible  
-        u.setBounds(150,80, 150,20); 
-		p.setBounds(150,110,150,20);  
 		createT.setBounds(70,50,150,50);//x axis, y axis, width, height  
-		createP.setBounds(280,50,150, 50);//x axis, y axis, width, height  
+		createP.setBounds(280,50,150, 50);//x axis, y axis, width, height 
+		getT.setBounds(70,150,150,50);//x axis, y axis, width, height  
+		getP.setBounds(280,150,150, 50);//x axis, y axis, width, height 
 
-		choose.add(createT);choose.add(createP);
+		choose.add(createT);choose.add(createP);choose.add(getT);choose.add(getP);
 		choose.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		createP.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
 			public void actionPerformed(ActionEvent e)
 			{  
-				person.guiP(a.id);
+				person.guiP(a);
 				choose.dispose();
 			}
 		});
@@ -129,6 +129,18 @@ public class login{
 			{  
 				transaction.guiT(a.id);
 				choose.dispose();
+			}
+		});
+		getT.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
+			public void actionPerformed(ActionEvent e)
+			{  
+				//TODO Add stuff here
+			}
+		});
+		getP.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
+			public void actionPerformed(ActionEvent e)
+			{  
+				//TODO Add stuff here
 			}
 		});
 
