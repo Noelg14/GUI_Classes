@@ -81,7 +81,7 @@ public class person {
 			//Class.forName("com.mysql.cj.jdbc.Driver");  
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 			try{
-				String query = " insert into person (id, first_name, last_name, email, DOB)"+ " values (?, ?, ?, ?, ?)";// Ref
+				String query = " insert into testperson (id, first_name, last_name, email, DOB)"+ " values (?, ?, ?, ?, ?)";// Ref
 				PreparedStatement preparedStmt = con.prepareStatement(query);
 				preparedStmt.setLong(1, p.id);
 				preparedStmt.setString(2, p.fname);
