@@ -52,9 +52,13 @@ public class login{
 						//ResultSetMetaData rsmd = rs.getMetaData();
 						while(rs.next()){
 							if(rs.getString(2).toLowerCase().equals(us) && rs.getString(2).toLowerCase().equals(pa)){ //uses First name (2) and First name (2)
-								System.out.print("i passed");
+
+								long id=rs.getLong(1);//User ID
 								JOptionPane.showMessageDialog(new JFrame(),"Login Successful, User ID:"+rs.getInt(1),"Error",JOptionPane.INFORMATION_MESSAGE);
-								transaction.guiT();
+								person p = person.getP(id);
+
+								System.out.print(p.lname+"&"+p.fname+"&"+p.id);
+								chooseType(p);
 								login.dispose();
 								//break;
 								con.close();
@@ -80,4 +84,41 @@ public class login{
         });
 
     }
+
+	public static void chooseType(person a){
+		JFrame choose=new JFrame("Logged in as "+a.fname+" "+a.lname); //doesnt display :/
+		final JTextField u=new JTextField();   //Name field
+		final JPasswordField p=new JPasswordField();   //Lname field
+		final JButton createT=new JButton("Create Transaction");//creating instance of JButton  
+		final JButton createP=new JButton("Create Person");
+
+		choose.setSize(500,200);//400 width and 500 height  
+		choose.setLayout(null);//using no layout managers  
+		choose.setVisible(true);//making the frame visible  
+        u.setBounds(150,80, 150,20); 
+		p.setBounds(150,110,150,20);  
+		createT.setBounds(70,50,150,50);//x axis, y axis, width, height  
+		createP.setBounds(280,50,150, 50);//x axis, y axis, width, height  
+
+		choose.add(createT);choose.add(createP);
+		choose.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		createP.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
+			public void actionPerformed(ActionEvent e)
+			{  
+				person.guiP(a.id);
+				choose.dispose();
+			}
+		});
+		createT.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
+			public void actionPerformed(ActionEvent e)
+			{  
+				transaction.guiT(a.id);
+				choose.dispose();
+			}
+		});
+
+	}
+
+
 }

@@ -5,13 +5,13 @@ import javax.swing.JOptionPane;
 import java.awt.event.*;
 
 public class person {
-    long id=(System.currentTimeMillis());
+	long id;
     String fname="";
     String lname="";
     Date dob = new Date(System.currentTimeMillis());
     String email="";
 
-	public static void guiP() {
+	public static void guiP(long id) {
 		JFrame login=new JFrame("Create Person:");
 		final JTextField fname=new JTextField();   //Name field
 		final JTextField lname=new JTextField();   //Lname field
@@ -92,7 +92,7 @@ public class person {
 			  // execute the preparedstatement
 			  preparedStmt.execute();
 			  con.close();
-			  
+			  JOptionPane.showMessageDialog(new JFrame(),"Created new person, ID:"+p.id,"Saved",JOptionPane.INFORMATION_MESSAGE);
 			  System.out.println("\nsaved");
 			  System.exit(0);
 			}
@@ -116,12 +116,32 @@ public class person {
 		p.lname=sc.nextLine();
 		System.out.print("Please enter an email: ");
 		p.email=sc.nextLine(); */
+		p.id=(System.currentTimeMillis());
 		p.fname=fn;
 		p.lname=ln;
 		p.email=em;
 
 		saveP(p);
-		JOptionPane.showMessageDialog(new JFrame(),"Created new person, ID:"+p.id,"Saved",JOptionPane.INFORMATION_MESSAGE);
 
 	}
+
+	static person getP(long id2){
+		person p = new person();
+		try{
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
+			Statement stmt=con.createStatement();  
+
+			ResultSet rs=stmt.executeQuery("Select * from testperson where ID="+id2);
+			while(rs.next()){
+				p.id=rs.getInt(1);
+				p.fname=rs.getString(2);
+				p.lname= rs.getString(3);
+				System.out.println(p.lname+" "+p.fname+" "+p.id); //works 
+			}
+			return p;
+		}
+		catch(Exception e){}
+		return p;
+	}
+
 }

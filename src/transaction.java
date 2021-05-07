@@ -12,8 +12,9 @@ public class transaction
 	double tax=0;
 	Date d = new Date(System.currentTimeMillis()); //will get this automatic in future
     String ref="";
+	long createdBy;
 
-	public static void guiT() {
+	public static void guiT(long c) {
 		JFrame login=new JFrame("Create Transaction:");
 		final JTextField gross=new JTextField();   //Name field
 		final JTextField net=new JTextField();   //Lname field
@@ -59,7 +60,7 @@ public class transaction
 				double n =Double.parseDouble(net.getText());
 				String r = ref.getText();
 				
-				createT(g, n, r);
+				createT(g, n, r, c);
 				gross.setText("");
 				net.setText("");
 				ref.setText("");
@@ -77,6 +78,7 @@ public class transaction
 		}); 
 
 	}
+	
     private static void saveT(transaction t){
 		try{
 			//Class.forName("com.mysql.cj.jdbc.Driver");  
@@ -107,13 +109,15 @@ public class transaction
 		
     }
 
-    static void createT(double g,double n,String r){
+    static void createT(double g,double n,String r,long i){
 		//Scanner sc = new Scanner(System.in);
         transaction t= new transaction();
 		t.gross=g;
 		t.net=n;
 		t.ref=r;
 		t.tax=t.gross-t.net;
+		t.createdBy=i;
+
 		
 		//System.out.print("Please enter a reference no: ");
 		//t.ref=sc.nextLine();
@@ -122,7 +126,7 @@ public class transaction
 		saveT(t);
 
 		JOptionPane.showMessageDialog(new JFrame(),"Created new transaction, ID:"+t.id,"Saved",JOptionPane.INFORMATION_MESSAGE);
-		person.guiP();
+		//person.guiP();
 	}
 
 }
