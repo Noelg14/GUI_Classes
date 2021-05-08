@@ -80,10 +80,63 @@ public class person {
 		}); 
 
 	}
-    
+  
+	public static void guiGetP(person a){
+		JFrame getPerson=new JFrame("Search");
+		final JTextField tf=new JTextField();   //Name field
+		final JLabel s=new JLabel();
+		final JButton b=new JButton("Search");//creating instance of JButton  
+		final JButton reset=new JButton("Back");
+
+		getPerson.setSize(400,500);//400 width and 500 height  
+		getPerson.setLayout(null);//using no layout managers  
+		getPerson.setVisible(true);//making the frame visible  
+        tf.setBounds(150,130, 150,20); 
+		b.setBounds(75,250,100,40);//x axis, y axis, width, height  
+		reset.setBounds(200,250,100, 40);//x axis, y axis, width, height  
+		s.setBounds(75,130,75,20);
+
+		getPerson.add(tf);getPerson.add(b);getPerson.add(reset);getPerson.add(s);
+		getPerson.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		s.setText("Search");
+
+		b.addActionListener(new ActionListener(){ // waits for button click 
+			public void actionPerformed(ActionEvent e)
+			{  
+				try{
+					Class.forName("com.mysql.cj.jdbc.Driver"); 
+					String search =tf.getText();
+					Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
+					Statement stmt=con.createStatement();  
+					ResultSet rs=stmt.executeQuery("Select id,first_name from testperson where first_name like '%"+search+"%' order by 1;");
+
+					while(rs.next()) {
+						Long id=rs.getLong(1);
+						person b = getP(id);
+						showP(b);
+					}
+				}
+				catch(Exception s){
+					System.out.print(s);
+				}
+			}
+		});
+
+		reset.addActionListener(new ActionListener(){ // waits for button click 
+			public void actionPerformed(ActionEvent e)
+			{  
+				getPerson.dispose();
+				login.chooseType(a);
+			}
+		});
+
+
+
+	}
+
     private static void saveP(person p,person a){//person a == logged in user, person p created user. 
 		try{
-			//Class.forName("com.mysql.cj.jdbc.Driver");  
+			Class.forName("com.mysql.cj.jdbc.Driver");  
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 			try{
 				String query = " insert into testperson (id, first_name, last_name, email, DOB,password)"+ " values (?, ?, ?, ?, ?,?)";// Ref
@@ -106,8 +159,8 @@ public class person {
 				System.out.println(e);
 			}
         }
-		catch(SQLException e){
-			System.out.println(e);
+		catch(SQLException | ClassNotFoundException c){
+			System.out.println(c);
 		}
 		
     }
@@ -131,6 +184,7 @@ public class person {
 		
 		person p = new person();
 		try{
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 			Statement stmt=con.createStatement();  
 
@@ -140,6 +194,8 @@ public class person {
 				p.id=id2;
 				p.fname=rs.getString(2);
 				p.lname= rs.getString(3);
+				p.email=rs.getString(4);
+				p.dob=rs.getDate(5);
 			return p;
 			}
 			else{
@@ -149,5 +205,47 @@ public class person {
 		catch(Exception e){}
 		return p;
 	}
+	
+	static void showP(person a){
+		JFrame showP=new JFrame("Person");
+		final JLabel fname=new JLabel();   //Name field
+		final JLabel lname=new JLabel();   //Name field
+		final JLabel email=new JLabel();   //Name field
+		final JLabel id=new JLabel();   //Name field
+		final JLabel dob=new JLabel();   //Name field
+		
+		final JButton reset=new JButton("Back");
 
+		showP.setSize(400,500);//400 width and 500 height  
+		showP.setLayout(null);//using no layout managers  
+		showP.setVisible(true);//making the frame visible  
+        fname.setBounds(50,130, 150,20); 
+		lname.setBounds(50,160, 150,20); 
+		email.setBounds(50,190, 200,20); 
+		dob.setBounds(50,210,150,20); 
+		id.setBounds(50,100,150,20); 
+
+		reset.setBounds(150,260,100, 40);//x axis, y axis, width, height  
+
+		showP.add(fname);showP.add(reset);showP.add(lname);showP.add(id);showP.add(email);showP.add(dob);
+		showP.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		String d = a.dob.toString();
+
+		fname.setText("First Name: "+a.fname);
+		lname.setText("Last Name: "+a.lname);
+		email.setText("Email :"+a.email);
+		id.setText("ID: "+a.id);
+		dob.setText("DOB: "+d);
+		
+		reset.addActionListener(new ActionListener(){ // waits for button click 
+			public void actionPerformed(ActionEvent e)
+			{  
+				showP.dispose();
+
+			}
+		});
+		
+	}
+	
 }
+

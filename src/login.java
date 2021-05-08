@@ -46,26 +46,22 @@ public class login{
                 }
                 else{
 					try {
+						Class.forName("com.mysql.cj.jdbc.Driver"); 
 						Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 						Statement stmt=con.createStatement();  
 						ResultSet rs=stmt.executeQuery("Select id,first_name,password from testperson order by 1;"); 
-						//ResultSetMetaData rsmd = rs.getMetaData();
-						//System.out.println(rsmd.getColumnCount()); // prints 3
+						ResultSetMetaData rsmd = rs.getMetaData();
+						System.out.println(rsmd.getColumnCount()); // prints 3
 
 
 						while(rs.next()){
 							String checkuser=rs.getString(2);
 							String checkpass=rs.getString(3);
-							/*
-								System.out.println(checkuser +" "+ checkpass);
-								System.out.println(checkuser.equals(us) && checkpass.equals(pa));
-							*/
-
 							if(checkuser.equals(us) && checkpass.equals(pa))
 							{ //uses First name (2) and password (3)
 								
 								long id=rs.getLong(1);//User ID
-								//System.out.println(id);
+								System.out.println(id);
 								JOptionPane.showMessageDialog(new JFrame(),"Login Successful, User ID:"+id,"Error",JOptionPane.INFORMATION_MESSAGE);
 								person p = person.getP(id); 
 								chooseType(p);
@@ -85,6 +81,7 @@ public class login{
 						con.close();
 					} 
 					catch (Exception s) {
+						System.out.print(s);
 					}
                 }
             }
@@ -140,7 +137,8 @@ public class login{
 		getP.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
 			public void actionPerformed(ActionEvent e)
 			{  
-				//TODO Add stuff here
+				person.guiGetP(a);
+				choose.dispose();
 			}
 		});
 
