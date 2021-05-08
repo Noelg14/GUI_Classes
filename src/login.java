@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.JOptionPane;
+import java.awt.Dimension;
 import java.awt.event.*;
 import java.sql.*;
 
@@ -17,6 +18,7 @@ public class login{
 		login.setSize(400,300);//400 width and 500 height  
 		login.setLayout(null);//using no layout managers  
 		login.setVisible(true);//making the frame visible  
+		login.setLocationRelativeTo(null); //Centres on the screen
         // login.pack(); minises tab 
         u.setBounds(150,80, 150,20); 
 		p.setBounds(150,110,150,20);  
@@ -76,8 +78,10 @@ public class login{
 								checkuser="";
 								checkpass="";
 							}
+							
 						}
-						//JOptionPane.showMessageDialog(new JFrame(),"Login Failed. Try Again!","Error",JOptionPane.INFORMATION_MESSAGE);
+						
+						//if(!rs.next()){ JOptionPane.showMessageDialog(new JFrame(),"Login Failed. Try Again!","Error",JOptionPane.INFORMATION_MESSAGE); }
 						con.close();
 					} 
 					catch (Exception s) {
@@ -110,6 +114,8 @@ public class login{
 		createP.setBounds(280,50,150, 50);//x axis, y axis, width, height 
 		getT.setBounds(70,150,150,50);//x axis, y axis, width, height  
 		getP.setBounds(280,150,150, 50);//x axis, y axis, width, height 
+		choose.setMinimumSize(new Dimension(500,400));
+		choose.setLocationRelativeTo(null);
 
 		choose.add(createT);choose.add(createP);choose.add(getT);choose.add(getP);
 		choose.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -124,14 +130,15 @@ public class login{
 		createT.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
 			public void actionPerformed(ActionEvent e)
 			{  
-				transaction.guiT(a.id);
+				transaction.guiT(a);
 				choose.dispose();
 			}
 		});
 		getT.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
 			public void actionPerformed(ActionEvent e)
 			{  
-				//TODO Add stuff here
+				transaction.guiGetT(a);
+				choose.dispose();
 			}
 		});
 		getP.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection

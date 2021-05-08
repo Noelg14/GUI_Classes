@@ -2,29 +2,35 @@ import java.sql.*;
 //import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.JOptionPane;
+import java.awt.Dimension;
 import java.awt.event.*;
+//import javax.swing.SwingUtilities;
 
 public class transaction
 {
-    long id= (System.currentTimeMillis());
+    long id;
     double gross=0;
     double net=0;
 	double tax=0;
-	Date d = new Date(System.currentTimeMillis()); //will get this automatic in future
+	Date d; //will get this automatic in future
     String ref="";
 	long createdBy;
 
-	public static void guiT(long c) {
-		JFrame login=new JFrame("Create Transaction:");
+	public static void guiT(person a) {
+		JFrame l=new JFrame("Create Transaction:");
 		final JTextField gross=new JTextField();   //gross field
 		final JTextField net=new JTextField();   //net field
 		final JTextField ref=new JTextField();   //ref field
 		final JButton b=new JButton("Create");//creating instance of JButton  
 		final JButton reset=new JButton("Reset");
+		final JButton back = new JButton("Back");
 
-		login.setSize(400,500);//400 width and 500 height  
-		login.setLayout(null);//using no layout managers  
-		login.setVisible(true);//making the frame visible  
+		l.setMinimumSize(new Dimension(400,500));
+		l.setLocationRelativeTo(null);
+		l.setSize(400,500);//400 width and 500 height  
+		l.setLayout(null);//using no layout managers  
+		l.setVisible(true);//making the frame visible  
+
 
         net.setBounds(150,180, 150,20); 
 		ref.setBounds(150,210, 150,20);  
@@ -32,6 +38,7 @@ public class transaction
 
 		b.setBounds(75,250,100,40);//x axis, y axis, width, height  
 		reset.setBounds(200,250,100, 40);//x axis, y axis, width, height  
+		back.setBounds(125,300,100,40);
 		JLabel t1,t2,t4;
 		t1=new JLabel();
 		t2=new JLabel();   
@@ -45,9 +52,9 @@ public class transaction
 		t4.setBounds(50,150,150,20);
 
 
-		login.add(b);login.add(reset);login.add(gross);login.add(net);login.add(ref);login.add(t2);
-		login.add(t1);login.add(t4);
-		login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		l.add(b);l.add(reset);l.add(gross);l.add(net);l.add(ref);l.add(t2);
+		l.add(t1);l.add(t4);l.add(back);
+		l.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 
 		b.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
 			public void actionPerformed(ActionEvent e)
@@ -56,7 +63,7 @@ public class transaction
 				double n =Double.parseDouble(net.getText());
 				String r = ref.getText();
 				
-				createT(g, n, r, c);
+				createT(g, n, r, a.id);
 				gross.setText("");
 				net.setText("");
 				ref.setText("");
@@ -72,9 +79,76 @@ public class transaction
 				ref.setText("");
 			}
 		}); 
+		back.addActionListener( new ActionListener()
+		{  
+			public void actionPerformed(ActionEvent r)
+			{  
+				l.dispose();
+				login.chooseType(a);
+			}
+		}); 
+
 
 	}
 	
+	public static void guiGetT(person c){
+		JFrame getTrans=new JFrame("Search");
+		final JTextField tf=new JTextField();   //Name field
+		final JLabel s=new JLabel();
+		final JButton b=new JButton("Search");//creating instance of JButton  
+		final JButton reset=new JButton("Back");
+
+		getTrans.setSize(400,500);//400 width and 500 height  
+		getTrans.setLayout(null);//using no layout managers  
+		getTrans.setVisible(true);//making the frame visible  
+        tf.setBounds(150,130, 150,20); 
+		b.setBounds(75,250,100,40);//x axis, y axis, width, height  
+		reset.setBounds(200,250,100, 40);//x axis, y axis, width, height  
+		s.setBounds(75,130,75,20);
+
+		getTrans.add(tf);getTrans.add(b);getTrans.add(reset);getTrans.add(s);
+		getTrans.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+		s.setText("Search");
+
+		b.addActionListener(new ActionListener(){ // waits for button click 
+			public void actionPerformed(ActionEvent e)
+			{  
+				String search =tf.getText();
+				if(search.equals("")){
+					JOptionPane.showMessageDialog(new JFrame(),"Please enter a reference to search","Error",JOptionPane.ERROR_MESSAGE);
+				}
+				else{
+					try{
+						Class.forName("com.mysql.cj.jdbc.Driver"); 
+						Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
+						Statement stmt=con.createStatement();  
+						ResultSet rs=stmt.executeQuery("Select id,ref from transaction where ref like '"+search+"%' order by 1;");
+
+						while(rs.next()) {
+							Long id=rs.getLong(1);
+							transaction t = getT(id);
+							showT(t);
+						}
+					}
+					catch(Exception s){
+						System.out.print(s);
+					}
+				}
+			}
+		});
+
+		reset.addActionListener(new ActionListener(){ // waits for button click 
+			public void actionPerformed(ActionEvent e)
+			{  
+				getTrans.dispose();
+				login.chooseType(c);
+			}
+		});
+
+
+
+	}
+
     private static void saveT(transaction t){
 		try{
 			//Class.forName("com.mysql.cj.jdbc.Driver");  
@@ -109,6 +183,8 @@ public class transaction
     static void createT(double g,double n,String r,long i){
 
         transaction t= new transaction();
+		t.id=(System.currentTimeMillis());
+		t.d=new Date(System.currentTimeMillis());
 		t.gross=g;
 		t.net=n;
 		t.ref=r;
@@ -146,4 +222,45 @@ public class transaction
 		return t;
 	}
 	
+	static void showT(transaction a){
+		JFrame showP=new JFrame("Transaction");
+		final JLabel gross=new JLabel();   //Name field
+		final JLabel net=new JLabel();   //Name field
+		final JLabel tax=new JLabel();   //Name field
+		final JLabel date=new JLabel();   //Name field
+		final JLabel ref=new JLabel();   //Name field
+		
+		final JButton reset=new JButton("Back");
+
+		showP.setSize(400,500);//400 width and 500 height  
+		showP.setLayout(null);//using no layout managers  
+		showP.setVisible(true);//making the frame visible  
+        gross.setBounds(50,130, 150,20); 
+		net.setBounds(50,160, 150,20); 
+		tax.setBounds(50,190, 200,20); 
+		date.setBounds(50,210,150,20); 
+		ref.setBounds(50,100,150,20); 
+		showP.setLocationRelativeTo(null);
+
+		reset.setBounds(150,260,100, 40);//x axis, y axis, width, height  
+
+		showP.add(gross);showP.add(reset);showP.add(net);showP.add(tax);showP.add(date);showP.add(ref);
+		showP.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+		String d = a.d.toString();
+
+		ref.setText("Ref: "+a.ref);
+		gross.setText("Gross: "+a.gross);
+		net.setText("Net: "+a.net);
+		tax.setText("Tax: "+a.tax);
+		date.setText("Date: "+d);
+		
+		reset.addActionListener(new ActionListener(){ // waits for button click 
+			public void actionPerformed(ActionEvent e)
+			{  
+				showP.dispose();
+
+			}
+		});
+		
+	}
 }

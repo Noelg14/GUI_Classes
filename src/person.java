@@ -29,6 +29,7 @@ public class person {
 		email.setBounds(150,160, 150,20);  
         fname.setBounds(150,100,150,20);
         pass.setBounds(150,190,150,20);
+		guip.setLocationRelativeTo(null);
 
 		b.setBounds(75,250,100,40);//x axis, y axis, width, height  
 		reset.setBounds(200,250,100, 40);//x axis, y axis, width, height  
@@ -95,29 +96,35 @@ public class person {
 		b.setBounds(75,250,100,40);//x axis, y axis, width, height  
 		reset.setBounds(200,250,100, 40);//x axis, y axis, width, height  
 		s.setBounds(75,130,75,20);
+		getPerson.setLocationRelativeTo(null);
 
 		getPerson.add(tf);getPerson.add(b);getPerson.add(reset);getPerson.add(s);
-		getPerson.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		getPerson.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
 		s.setText("Search");
 
 		b.addActionListener(new ActionListener(){ // waits for button click 
 			public void actionPerformed(ActionEvent e)
 			{  
-				try{
-					Class.forName("com.mysql.cj.jdbc.Driver"); 
-					String search =tf.getText();
-					Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
-					Statement stmt=con.createStatement();  
-					ResultSet rs=stmt.executeQuery("Select id,first_name from testperson where first_name like '%"+search+"%' order by 1;");
-
-					while(rs.next()) {
-						Long id=rs.getLong(1);
-						person b = getP(id);
-						showP(b);
-					}
+				String search =tf.getText();
+				if(search.equals("")){
+					JOptionPane.showMessageDialog(new JFrame(),"Please enter a username to search","Error",JOptionPane.ERROR_MESSAGE);
 				}
-				catch(Exception s){
-					System.out.print(s);
+				else{
+					try{
+						Class.forName("com.mysql.cj.jdbc.Driver"); 
+						Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
+						Statement stmt=con.createStatement();  
+						ResultSet rs=stmt.executeQuery("Select id,first_name from testperson where first_name like '"+search+"%' order by 1;");
+
+						while(rs.next()) {
+							Long id=rs.getLong(1);
+							person b = getP(id);
+							showP(b);
+						}
+					}
+					catch(Exception s){
+						System.out.print(s);
+					}
 				}
 			}
 		});
@@ -215,6 +222,7 @@ public class person {
 		final JLabel dob=new JLabel();   //Name field
 		
 		final JButton reset=new JButton("Back");
+		showP.setLocationRelativeTo(null);
 
 		showP.setSize(400,500);//400 width and 500 height  
 		showP.setLayout(null);//using no layout managers  
