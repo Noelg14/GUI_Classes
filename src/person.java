@@ -20,6 +20,7 @@ public class person {
 		final JPasswordField pass=new JPasswordField();   //pw field
 		final JButton b=new JButton("Create");//creating instance of JButton  
 		final JButton reset=new JButton("Reset");
+		final JButton back = new JButton("Back");
 
 		guip.setSize(400,500);//400 width and 500 height  
 		guip.setLayout(null);//using no layout managers  
@@ -33,6 +34,7 @@ public class person {
 
 		b.setBounds(75,250,100,40);//x axis, y axis, width, height  
 		reset.setBounds(200,250,100, 40);//x axis, y axis, width, height  
+		back.setBounds(140,300,100,40);
 
 		JLabel t1,t2,t3,t4;
 		t1=new JLabel();
@@ -51,7 +53,7 @@ public class person {
 
 
 		guip.add(b);guip.add(reset);guip.add(fname);guip.add(lname);guip.add(email);guip.add(t2);guip.add(t3);
-		guip.add(pass);guip.add(t1);guip.add(t4);
+		guip.add(pass);guip.add(t1);guip.add(t4);guip.add(back);
 		guip.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 
 		b.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
@@ -77,6 +79,14 @@ public class person {
 				lname.setText("");
 				email.setText("");
 				pass.setText("");
+			}
+		}); 
+		back.addActionListener( new ActionListener()
+		{  
+			public void actionPerformed(ActionEvent r)
+			{  
+				guip.dispose();
+				login.chooseType(a);
 			}
 		}); 
 
@@ -172,7 +182,7 @@ public class person {
 		
     }
 
-	static void createP(String fn,String ln,String em,String pass,person a){ //person a == logged in user
+	private static void createP(String fn,String ln,String em,String pass,person a){ //person a == logged in user
 
 		person p = new person();
 

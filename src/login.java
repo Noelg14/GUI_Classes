@@ -7,7 +7,7 @@ import java.sql.*;
 public class login{
     Boolean success;
 
-    public static void loginGUI(){
+    public static void loginGUI(){ // main log-in window.
 
         JFrame login=new JFrame("Login to System:");
 		final JTextField u=new JTextField();   //Name field
@@ -100,12 +100,13 @@ public class login{
 
     }
 
-	public static void chooseType(person a){
+	public static void chooseType(person a){ //Choose what to do
 		JFrame choose=new JFrame("Logged in as "+a.fname+" "+a.lname); //
 		final JButton createT=new JButton("Create Transaction");//creating instance of JButton  
 		final JButton createP=new JButton("Create Person");
 		final JButton getT=new JButton("Get Transaction");//creating instance of JButton  
 		final JButton getP=new JButton("Get Person");
+		final JButton logout=new JButton("Log Out");
 
 		choose.setSize(500,400);//width, height 
 		choose.setLayout(null);//using no layout managers  
@@ -114,10 +115,11 @@ public class login{
 		createP.setBounds(280,50,150, 50);//x axis, y axis, width, height 
 		getT.setBounds(70,150,150,50);//x axis, y axis, width, height  
 		getP.setBounds(280,150,150, 50);//x axis, y axis, width, height 
+		logout.setBounds(175, 300,150,50);
 		choose.setMinimumSize(new Dimension(500,400));
 		choose.setLocationRelativeTo(null);
 
-		choose.add(createT);choose.add(createP);choose.add(getT);choose.add(getP);
+		choose.add(createT);choose.add(createP);choose.add(getT);choose.add(getP);choose.add(logout);
 		choose.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		createP.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
@@ -149,6 +151,13 @@ public class login{
 			}
 		});
 
+		logout.addActionListener(new ActionListener(){ // waits for button click takes U&PW passes it into Connection
+			public void actionPerformed(ActionEvent e)
+			{  
+				loginGUI();
+				choose.dispose();
+			}
+		});
 	}
 
 }

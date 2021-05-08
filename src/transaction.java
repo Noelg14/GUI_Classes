@@ -38,7 +38,7 @@ public class transaction
 
 		b.setBounds(75,250,100,40);//x axis, y axis, width, height  
 		reset.setBounds(200,250,100, 40);//x axis, y axis, width, height  
-		back.setBounds(125,300,100,40);
+		back.setBounds(140,300,100,40);
 		JLabel t1,t2,t4;
 		t1=new JLabel();
 		t2=new JLabel();   
@@ -105,6 +105,7 @@ public class transaction
 		b.setBounds(75,250,100,40);//x axis, y axis, width, height  
 		reset.setBounds(200,250,100, 40);//x axis, y axis, width, height  
 		s.setBounds(75,130,75,20);
+		getTrans.setLocationRelativeTo(null);
 
 		getTrans.add(tf);getTrans.add(b);getTrans.add(reset);getTrans.add(s);
 		getTrans.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
@@ -180,7 +181,7 @@ public class transaction
 		
     }
 
-    static void createT(double g,double n,String r,long i){
+    private static void createT(double g,double n,String r,long i){
 
         transaction t= new transaction();
 		t.id=(System.currentTimeMillis());
@@ -235,12 +236,14 @@ public class transaction
 		showP.setSize(400,500);//400 width and 500 height  
 		showP.setLayout(null);//using no layout managers  
 		showP.setVisible(true);//making the frame visible  
+		showP.setLocationRelativeTo(null);
+
         gross.setBounds(50,130, 150,20); 
 		net.setBounds(50,160, 150,20); 
 		tax.setBounds(50,190, 200,20); 
 		date.setBounds(50,210,150,20); 
 		ref.setBounds(50,100,150,20); 
-		showP.setLocationRelativeTo(null);
+		
 
 		reset.setBounds(150,260,100, 40);//x axis, y axis, width, height  
 

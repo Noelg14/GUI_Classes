@@ -7,9 +7,9 @@ public class oopTest
     /*
       DONE: Add login, which validates vs DB entries -Done! Seems to be fine now
       DONE: Add Screen to select Between guiT and GuiP -Done! -> need to add a get person / get Transaction screen
-      TODO: add get/set methods for person/ transaction -In progress
-      TODO: Get a 'login' associated with transactions -> done, want to do with persons aswell
-      TODO: Tidy up GUIs, copy/paste doesnt look pretty 
+      DONE: add get/set methods for person/ transaction -Done
+      DONE: Get a 'login' associated with transactions -> done
+      DONE: Tidy up GUIs, copy/paste doesnt look pretty - ehhh Kinda done?
         
       */
     }
