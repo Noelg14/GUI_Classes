@@ -108,7 +108,7 @@ public class transaction
 		getTrans.setLocationRelativeTo(null);
 
 		getTrans.add(tf);getTrans.add(b);getTrans.add(reset);getTrans.add(s);
-		getTrans.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+		getTrans.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		s.setText("Search");
 
 		b.addActionListener(new ActionListener(){ // waits for button click 

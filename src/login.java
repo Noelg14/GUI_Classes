@@ -81,11 +81,13 @@ public class login{
 							
 						}
 						
-						//if(!rs.next()){ JOptionPane.showMessageDialog(new JFrame(),"Login Failed. Try Again!","Error",JOptionPane.INFORMATION_MESSAGE); }
+						//if(rs.last()){ JOptionPane.showMessageDialog(new JFrame(),"Login Failed. Try Again!","Error",JOptionPane.INFORMATION_MESSAGE); }
 						con.close();
 					} 
 					catch (Exception s) {
 						System.out.print(s);
+						u.setText("");
+                		p.setText("");
 					}
                 }
             }

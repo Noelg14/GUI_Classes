@@ -2,6 +2,8 @@ import java.sql.*;
 //import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.JOptionPane;
+
+
 import java.awt.event.*;
 
 public class person {
@@ -109,13 +111,14 @@ public class person {
 		getPerson.setLocationRelativeTo(null);
 
 		getPerson.add(tf);getPerson.add(b);getPerson.add(reset);getPerson.add(s);
-		getPerson.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+		getPerson.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		s.setText("Search");
 
 		b.addActionListener(new ActionListener(){ // waits for button click 
 			public void actionPerformed(ActionEvent e)
 			{  
 				String search =tf.getText();
+				search.trim();
 				if(search.equals("")){
 					JOptionPane.showMessageDialog(new JFrame(),"Please enter a username to search","Error",JOptionPane.ERROR_MESSAGE);
 				}
@@ -130,6 +133,7 @@ public class person {
 							Long id=rs.getLong(1);
 							person b = getP(id);
 							showP(b);
+
 						}
 					}
 					catch(Exception s){
@@ -197,14 +201,12 @@ public class person {
 
 	}
 
-	static person getP(long id2){
+	static person getP(long id2) throws SQLException,ClassNotFoundException{
 		
 		person p = new person();
-		try{
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
 			Statement stmt=con.createStatement();  
-
 			ResultSet rs=stmt.executeQuery("Select * from testperson where ID="+id2+" limit 1;");
 			if(rs.next()){
 				//System.out.println(p.id);
@@ -217,10 +219,9 @@ public class person {
 			}
 			else{
 				System.out.println("Uh Oh!");
+				return null;
 			}
-		}
-		catch(Exception e){}
-		return p;
+
 	}
 	
 	static void showP(person a){
