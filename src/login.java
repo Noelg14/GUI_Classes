@@ -49,7 +49,7 @@ public class login{
                 else{
 					try {
 						Class.forName("com.mysql.cj.jdbc.Driver"); 
-						Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/schema","noel","noel");
+						Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306","USER","PASSWORD");
 						Statement stmt=con.createStatement();  
 						ResultSet rs=stmt.executeQuery("Select id,first_name,password from testperson order by 1;"); 
 						ResultSetMetaData rsmd = rs.getMetaData();
